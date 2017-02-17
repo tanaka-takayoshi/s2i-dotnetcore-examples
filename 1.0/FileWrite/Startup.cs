@@ -36,11 +36,33 @@ namespace ConsoleApplication
                 if (context.Request.Path == "/Write")
                 {
                     var path = Environment.GetEnvironmentVariable("DEFAULT_PERSISTENT_PATH");
-                    //string readText = "File does not found on the path "+ path;
                     try 
                     {
                         var createText = "print('Hello NFS');" + Environment.NewLine;
-                        File.WriteAllText(path, createText);
+                        File.WriteAllText(path, createText);    
+                        var readText = "Data read from "+ path + " is " +File.ReadAllText(path);
+                        Console.WriteLine(readText);
+                        await context.Response.WriteAsync(readText);
+                    } 
+                    catch (Exception e) 
+                    {
+                        Console.WriteLine(e);
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync(e.Message);
+                    }
+                }
+                else if (context.Request.Path == "/Write2")
+                {
+                    var path = Environment.GetEnvironmentVariable("DEFAULT_PERSISTENT_PATH");
+                    try 
+                    {
+                        var createText = "print('Hello NFS');" + Environment.NewLine;
+                        var fs = File.Create(path);
+                        using(var r = new StreamWriter(fs))
+                        {
+                            r.WriteLine("createText");
+                        }
+                        File.ReadAllText(path); 
                         var readText = "Data read from "+ path + " is " +File.ReadAllText(path);
                         Console.WriteLine(readText);
                         await context.Response.WriteAsync(readText);
