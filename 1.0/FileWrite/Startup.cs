@@ -60,7 +60,7 @@ namespace ConsoleApplication
                         var fs = File.Create(path);
                         using(var r = new StreamWriter(fs))
                         {
-                            r.WriteLine("createText");
+                            r.WriteLine(createText);
                         }
                         File.ReadAllText(path); 
                         var readText = "Data read from "+ path + " is " +File.ReadAllText(path);
